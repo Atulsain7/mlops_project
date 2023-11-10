@@ -8,7 +8,7 @@ DATA_UTILS_LOGGER = get_logger(Path(__file__).name)
 
 
 def is_dvc_initialized() -> bool:
-    return (Path().cwd() / ".dvc").exists()
+    return (Path().parents[2]/"data" / ".dvc").exists()
 
 
 def initialize_dvc() -> None:

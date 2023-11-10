@@ -30,10 +30,10 @@ guard-%:
 
 ## Call entrypoint
 entrypoint: up
-	$(DOCKER_COMPOSE_EXEC) python src/entrypoint.py
+	$(DOCKER_COMPOSE_EXEC) python app/src/entrypoint.py
 
 train: up
-	$(DOCKER_COMPOSE_EXEC) python src/train.py
+	$(DOCKER_COMPOSE_EXEC) python app/src/train.py
 ## Starts jupyter lab
 notebook: up
 	$(DOCKER_COMPOSE_EXEC) jupyter-lab --ip 0.0.0.0 --port 8888 --no-browser
@@ -70,7 +70,7 @@ test: up
 	$(DOCKER_COMPOSE_EXEC) pytest
 
 version-data: up
-	$(DOCKER_COMPOSE_EXEC) python src/version_data.py
+	$(DOCKER_COMPOSE_EXEC) python app/src/version_data.py
 
 ## Perform a full check
 full-check: lint check-type-annotations

@@ -1,5 +1,5 @@
-from src.config_schemas.config_schema import Config
-from src.utils.config_utils import get_config
+from app.src.config_schemas.config_schema import Config
+from app.src.utils.config_utils import get_config
 
 
 @get_config(config_path="../configs", config_name="config")

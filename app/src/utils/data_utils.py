@@ -1,14 +1,14 @@
 from pathlib import Path
 from subprocess import CalledProcessError
 
-from src.utils.utils import get_logger, run_shell_command
+from app.src.utils.utils import get_logger, run_shell_command
 
 
 DATA_UTILS_LOGGER = get_logger(Path(__file__).name)
 
 
 def is_dvc_initialized() -> bool:
-    return (Path().parents[2]/"data" / ".dvc").exists()
+    return (Path(__file__).parents[3]/ ".dvc").exists()
 
 
 def initialize_dvc() -> None:

@@ -14,7 +14,7 @@ services:
       - HYDRA_FULL_ERROR=1
       # - GCLOUD_PROJECT=${GCLOUD_PROJECT}
     volumes:
-      - ./app:/app/
+      - .:/app/
       - /.ssh:/.ssh
       - /home/atul/.config/gcloud:/usr/local/gcloud/
     networks:

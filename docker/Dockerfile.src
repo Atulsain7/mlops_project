@@ -7,7 +7,7 @@ ENV HOME=/home/${USER_NAME} \
 ENV \
   PYTHONUNBUFFERED=1 \
   DEBIAN_FRONTEND=noninteractive \
-  TZ=Europe/Warsaw \
+  TZ=Asia/Kolkata \
   PATH="/usr/local/gcloud/google-cloud-sdk/bin:${HOME}/.local/bin:${VIRTUAL_ENV}/bin:${PATH}" \
   PYTHONPATH="/app:${PYTHONPATH}" \
   BUILD_POETRY_LOCK="${HOME}/poetry.lock.build"
@@ -28,7 +28,7 @@ RUN addgroup --system --gid ${USER_ID} ${USER_NAME} \
 RUN chown -R ${USER_NAME}:${USER_NAME} ${HOME}
 RUN mkdir -p /app && chown -R ${USER_NAME}:${USER_NAME} /app /tmp
 
-RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.4.2
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 USER ${USER_NAME}
 
@@ -47,4 +47,4 @@ RUN chown -R ${USER_NAME} /*.sh && chmod +x /*.sh
 USER ${USER_NAME}
 
 COPY . /app/
-CMD ["/startup-script.sh"]
+ENTRYPOINT [ "/bin/sh", "-c", "tail -f /dev/null" ]

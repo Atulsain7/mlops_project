@@ -30,8 +30,10 @@ guard-%:
 
 ## Call entrypoint
 entrypoint: up
-	$(DOCKER_COMPOSE_EXEC) python ./src/entrypoint.py
+	$(DOCKER_COMPOSE_EXEC) python src/entrypoint.py
 
+train: up
+	$(DOCKER_COMPOSE_EXEC) python src/train.py
 ## Starts jupyter lab
 notebook: up
 	$(DOCKER_COMPOSE_EXEC) jupyter-lab --ip 0.0.0.0 --port 8888 --no-browser

@@ -3,13 +3,25 @@ version: '2.1'
 services:
   mlflow-src:
     container_name: app
-    image: bitnami/mlflow:latest
+    build: 
+      context: .
+      dockerfile: docker/Dockerfile.src
+      args:
+        - USER_ID=${USER_ID}
+        - USER_NAME=${USER_NAME}
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/usr/local/gcloud/application_default_credentials.json
+      # - GCLOUD_PROJECT=${GCLOUD_PROJECT}
     volumes:
-      - /src:/app
+      - ./app:/app/
+      - /.ssh:/.ssh
+      - /home/atul/.config/gcloud:/usr/local/gcloud/
     networks:
       - mlflow-net
     depends_on:
       - mlflow-database
+    env_file:
+      - .envs/.mlflow
 
   mlflow-database:
     container_name: mlflow-database

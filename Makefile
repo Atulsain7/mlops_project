@@ -69,6 +69,9 @@ check-type-annotations: up
 test: up
 	$(DOCKER_COMPOSE_EXEC) pytest
 
+version-data: up
+	$(DOCKER_COMPOSE_EXEC) python src/version_data.py
+
 ## Perform a full check
 full-check: lint check-type-annotations
 	$(DOCKER_COMPOSE_EXEC) pytesta --cov --cov-report xml --verbose

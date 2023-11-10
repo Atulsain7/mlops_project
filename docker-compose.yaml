@@ -1,31 +1,42 @@
-version: "3.8"
+version: '2.1'
 
 services:
-  app:
-    user: "${USER_ID:-1000}"
-    hostname: "${HOST_NAME:-emkademy}"
-    image: cybulde-template
-    container_name: cybulde-template-container
+  mlflow-src:
+    container_name: app
+    image: bitnami/mlflow:latest
+    volumes:
+      - /src:/app
+    networks:
+      - mlflow-net
+    depends_on:
+      - mlflow-database
+
+  mlflow-database:
+    container_name: mlflow-database
+    image: bitnami/postgresql:latest
+    volumes:
+      - /postgres-data:/bitnami/postgresql
+    networks:
+      - mlflow-net
+    ports:
+      - "5432:5432"
+    env_file:
+      - .envs/.postgres
+
+  mlflow-server:
+    container_name: mlflow-server
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
-      args:
-        USER_NAME: "${USER_NAME:-kyuksel}"
-        USER_ID: "${USER_ID:-1000}"
-    volumes:
-      - ./:/app/
-      - ~/.config/gcloud/:/home/${USER_NAME}/.config/gcloud
+      dockerfile: docker/Dockerfile.server
+    networks:
+      - mlflow-net
     ports:
-      - 8080:8080
+      - "5000:5000"
+    depends_on:
+      - mlflow-database
+    env_file:
+      - .envs/.postgres
+      - .envs/.mlflow
 
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    ipc: host
-    init: true
-
-
+networks:
+  mlflow-net:

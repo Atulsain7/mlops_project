@@ -1,5 +1,8 @@
 # Make all targets .PHONY
 .PHONY: $(shell sed -n -e '/^$$/ { n ; /^[^ .\#][^ ]*:/ { s/:.*$$// ; p ; } ; }' $(MAKEFILE_LIST))
+include .envs/.postgres
+include .envs/.mlflow
+export
 
 SHELL = /usr/bin/env bash
 USER_NAME = $(shell whoami)
@@ -12,10 +15,10 @@ else
 	DOCKER_COMPOSE_COMMAND = docker-compose
 endif
 
-SERVICE_NAME = app
-CONTAINER_NAME = cybulde-template-container
+SERVICE_NAME = mlflow-src
+CONTAINER_NAME = app
 
-DIRS_TO_VALIDATE = cybulde
+DIRS_TO_VALIDATE = src
 DOCKER_COMPOSE_RUN = $(DOCKER_COMPOSE_COMMAND) run --rm $(SERVICE_NAME)
 DOCKER_COMPOSE_EXEC = $(DOCKER_COMPOSE_COMMAND) exec $(SERVICE_NAME)
 
@@ -27,7 +30,7 @@ guard-%:
 
 ## Call entrypoint
 entrypoint: up
-	$(DOCKER_COMPOSE_EXEC) python ./cybulde/entrypoint.py
+	$(DOCKER_COMPOSE_EXEC) python ./src/entrypoint.py
 
 ## Starts jupyter lab
 notebook: up
@@ -71,6 +74,12 @@ full-check: lint check-type-annotations
 ## Builds docker image
 build:
 	$(DOCKER_COMPOSE_COMMAND) build $(SERVICE_NAME)
+
+build-all:
+	mkdir -p postgres-data
+	sudo chown -R 1001:1001 /postgres-data
+	sudo chmod -R 775 /postgres-data
+	$(DOCKER_COMPOSE_COMMAND) build --no-cache
 
 ## Remove poetry.lock and build docker image
 build-for-dependencies:

@@ -93,7 +93,22 @@ down:
 exec-in: up
 	docker exec -it $(CONTAINER_NAME) bash
 
+configure-gcloud:
+	gcloud init
+	gcloud auth login
+	gcloud auth application-default login
+
+create-bucket:
+	gcloud storage buckets create gs://dvc-storage-bucket \
+	--project=mlops-project-403302 --default-storage-class=standard \
+	--location=asia-south2 --uniform-bucket-level-access
+# Credentials saved to file: [/home/atul/.config/gcloud/application_default_credentials.json]
+dvc-remote-add:
+	dvc remote add remote-storage gs://dvc-storage-bucket
+	dvc remote default remote-storage
+
 .DEFAULT_GOAL := help
+
 
 # Inspired by <http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html>
 # sed script explained:

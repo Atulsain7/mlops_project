@@ -15,7 +15,7 @@ services:
       # - GCLOUD_PROJECT=${GCLOUD_PROJECT}
     volumes:
       - .:/app/
-      - /.ssh:/.ssh
+      - /home/atul/.ssh:/home/atul/.ssh/
       - /home/atul/.config/gcloud:/usr/local/gcloud/
     networks:
       - mlflow-net
